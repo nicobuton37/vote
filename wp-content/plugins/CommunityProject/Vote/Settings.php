@@ -93,14 +93,12 @@ class Settings
         $admins = get_users($args);
         foreach ($admins as $admin) {
             $budget_admin = get_user_meta($admin->ID, self::STUDENT_BUDGET);
-            for ($i = 0; $i <= count($budget_admin); $i++) {
-                $the_budget = $budget_admin[$i];
+            foreach ($budget_admin as $value) {
+                $the_budget = $value;
             }
 
         }
-        var_dump($the_budget);
-        die();
-//        update_user_meta($user_id, self::STUDENT_BUDGET, $the_budget);
+        update_user_meta($user_id, self::STUDENT_BUDGET, $the_budget);
 
     }
 
