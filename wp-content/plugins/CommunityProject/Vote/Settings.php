@@ -7,12 +7,13 @@ use CommunityProject\UserRoleController;
 
 class Settings
 {
-
+    const STUDENT_BUDGET = 'student_budget';
     public function __construct()
     {
         // add menu
         add_action('admin_menu', array($this, 'submenu_budget'), 20);
         add_action('admin_menu', array($this, 'submenu_vote'), 20);
+        add_action('user_register', array($this, 'attribute_budget_for_new_user'));
         $budget = $this->add_custom_user_meta_budget();
     }
 
@@ -77,8 +78,30 @@ class Settings
         if (isset($_POST['student_budget'])) {
             foreach ($students as $student) {
                 $student_id = $student->ID;
-                add_user_meta($student_id, 'student_budget', isset($_POST['student_budget']));
+                update_user_meta($student_id, 'student_budget', $_POST['student_budget']);
             }
         }
+
     }
+
+    public function attribute_budget_for_new_user($user_id)
+    {
+        $args = array(
+            'role' => 'administrator'
+        );
+
+        $admins = get_users($args);
+        foreach ($admins as $admin) {
+            $budget_admin = get_user_meta($admin->ID, self::STUDENT_BUDGET);
+            for ($i = 0; $i <= count($budget_admin); $i++) {
+                $the_budget = $budget_admin[$i];
+            }
+
+        }
+        var_dump($the_budget);
+        die();
+//        update_user_meta($user_id, self::STUDENT_BUDGET, $the_budget);
+
+    }
+
 }
